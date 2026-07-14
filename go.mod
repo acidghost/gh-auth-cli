@@ -2,7 +2,7 @@ module github.com/acidghost/gh-auth-cli
 
 go 1.25.0
 
-toolchain go1.26.4
+toolchain go1.26.5
 
 require (
 	github.com/rs/zerolog v1.35.1
