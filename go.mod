@@ -2,8 +2,6 @@ module github.com/acidghost/gh-auth-cli
 
 go 1.26.0
 
-toolchain go1.27.3
-
 require (
 	github.com/rs/zerolog v1.35.1
 	github.com/spf13/cobra v1.10.2
