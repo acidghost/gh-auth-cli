@@ -37,7 +37,7 @@ jobs:
         run: just release-check
 
       - name: Run tests
-        run: go test ./...
+        run: just test
 
       - name: Release binaries
         run: just release

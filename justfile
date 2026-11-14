@@ -40,6 +40,10 @@ fmt:
 lint:
     golangci-lint run
 
+# Run all Go tests.
+test:
+    go test ./...
+
 # Validate the GoReleaser configuration.
 release-check:
     goreleaser check
