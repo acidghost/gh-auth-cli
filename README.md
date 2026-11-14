@@ -16,6 +16,23 @@ Create a GitHub App under **Settings → Developer settings → GitHub Apps**:
 
 The CLI needs the app's **Client ID** and **client secret**. It does not need the app private key.
 
+## Install a release
+
+Download the archive for your OS (`darwin` for macOS or `linux`) and architecture (`amd64` or `arm64`) from [GitHub Releases](https://github.com/acidghost/gh-auth-cli/releases). Each archive contains the `gh-auth-cli` binary, README, and license.
+
+Verify the archive before extracting it:
+
+```bash
+# Download SHA256SUMS from the same release, then:
+sha256sum --ignore-missing --check SHA256SUMS # Linux
+# On macOS, use: shasum -a 256 --ignore-missing --check SHA256SUMS
+
+# Optional: verify the GitHub build provenance (requires gh):
+gh attestation verify './gh-auth-cli_<version>_<os>_<arch>.tar.gz' --repo acidghost/gh-auth-cli
+```
+
+Extract the archive and put `gh-auth-cli` in a directory on your `PATH`.
+
 ## Build
 
 ```bash
@@ -27,6 +44,26 @@ Or with `just`:
 ```bash
 just build
 ```
+
+## Releases
+
+Maintainers publish a release by pushing a semantic version tag:
+
+```bash
+git tag v1.2.3
+git push origin v1.2.3
+```
+
+The release workflow runs tests, then uses the GoReleaser version pinned in `mise.toml` to publish macOS and Linux binaries for amd64 and arm64, `SHA256SUMS`, and GitHub artifact attestations. Tags such as `v1.2.3-rc.1` produce prereleases. Binaries embed the version, commit, and commit date, available via `gh-auth-cli --version`. Builds use vendored dependencies and do not run `go mod tidy` or change dependency files.
+
+To validate locally without publishing (after `mise install`):
+
+```bash
+mise exec -- goreleaser check
+mise exec -- goreleaser release --snapshot --clean --skip=publish
+```
+
+Snapshot archives are written to `dist/`. CI runs the same snapshot pipeline on pull requests.
 
 ## Usage
 

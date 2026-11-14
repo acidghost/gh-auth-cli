@@ -34,8 +34,16 @@ jobs:
       - name: Run linter
         run: just lint
 
-      - name: Build binary
-        run: just build
+      - name: Run tests
+        run: go test ./...
+
+      - name: Validate release configuration
+        run: goreleaser check
+
+      - name: Build release snapshot
+        run: goreleaser release --snapshot --clean --skip=publish
 
       - name: Smoke test
-        run: just run --help
+        run: |
+          ./dist/gh-auth-cli_linux_amd64_v1/gh-auth-cli --help
+          ./dist/gh-auth-cli_linux_amd64_v1/gh-auth-cli --version
