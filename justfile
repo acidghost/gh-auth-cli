@@ -1,13 +1,5 @@
 program := 'gh-auth-cli'
 
-version := 'SNAPSHOT-'+`git describe --tags --always --dirty 2>/dev/null || printf 'unknown'`
-commit_sha := `(git rev-parse HEAD 2>/dev/null || printf 'unknown') | tr -d '\n'`
-build_time := `date -u '+%Y-%m-%d_%H:%M:%S'`
-
-ldflags := '-s -w -X main.buildVersion='+version \
-        +' -X main.buildCommit='+commit_sha \
-        +' -X main.buildDate='+build_time
-
 install_prefix := `go env GOBIN`
 
 goos := if os() == 'macos' { 'darwin' } else { os() }
@@ -16,15 +8,13 @@ goarch := if arch() == 'aarch64' { 'arm64' } else if arch() == 'x86_64' { 'amd64
 alias b := build
 alias r := run
 
-# Build binaries for macOS arm64 and Linux arm64/amd64.
-build-all: (build 'darwin' 'arm64') (build 'linux' 'arm64') (build 'linux' 'amd64')
+# Build binaries for all GoReleaser targets into dist/.
+build-all:
+    goreleaser build --snapshot --clean
 
 # Build a binary for the selected OS and architecture (defaults to the host).
 build os=goos arch=goarch: build-dir
-    CGO_ENABLED=0 GOOS={{os}} GOARCH={{arch}} \
-        go build \
-            -ldflags '{{ldflags}}' \
-            -o build/{{program}}-{{os}}-{{arch}}
+    GOOS={{os}} GOARCH={{arch}} goreleaser build --snapshot --single-target --clean --output build/{{program}}
 
 # Create the build output directory.
 build-dir:
@@ -32,7 +22,7 @@ build-dir:
 
 # Build and run the host binary with the supplied arguments.
 run *args: build
-    ./build/{{program}}-{{goos}}-{{goarch}} {{args}}
+    ./build/{{program}} {{args}}
 
 # Tidy Go modules and refresh vendored dependencies.
 vendor:
@@ -65,11 +55,11 @@ release:
 
 # Build and install the host binary into GOBIN.
 install: build
-    cp -v './build/{{program}}-{{goos}}-{{goarch}}' "{{install_prefix}}/{{program}}"
+    cp -v './build/{{program}}' "{{install_prefix}}/{{program}}"
 
-# Remove the build output directory.
+# Remove local build and release output directories.
 clean:
-    rm -rf build
+    rm -rf build dist
 
 # List available recipes.
 help:

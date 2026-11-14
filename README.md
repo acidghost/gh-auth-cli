@@ -35,15 +35,15 @@ Extract the archive and put `gh-auth-cli` in a directory on your `PATH`.
 
 ## Build
 
-```bash
-go build -o gh-auth-cli .
-```
-
-Or with `just`:
+Install the pinned tools with `mise install`, then build using the same GoReleaser configuration as CI:
 
 ```bash
 just build
+just run --help
+just run --version
 ```
+
+`just build` writes the host binary to `build/gh-auth-cli`. To cross-compile one target, use e.g. `just build linux amd64` (same output path). `just build-all` builds every configured target into `dist/`. All builds use the flags and version metadata from `.goreleaser.yaml`.
 
 ## Releases
 
