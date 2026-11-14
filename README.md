@@ -59,11 +59,11 @@ The release workflow runs tests, then uses the GoReleaser version pinned in `mis
 To validate locally without publishing (after `mise install`):
 
 ```bash
-mise exec -- goreleaser check
-mise exec -- goreleaser release --snapshot --clean --skip=publish
+just release-check
+just release-snapshot
 ```
 
-Snapshot archives are written to `dist/`. CI runs the same snapshot pipeline on pull requests.
+Snapshot archives are written to `dist/`. CI uses these same recipes on pull requests. The tag-triggered release workflow runs `just release` to publish; running it locally requires a version tag and `GITHUB_TOKEN`.
 
 ## Usage
 

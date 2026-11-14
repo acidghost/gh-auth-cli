@@ -38,10 +38,10 @@ jobs:
         run: go test ./...
 
       - name: Validate release configuration
-        run: goreleaser check
+        run: just release-check
 
       - name: Build release snapshot
-        run: goreleaser release --snapshot --clean --skip=publish
+        run: just release-snapshot
 
       - name: Smoke test
         run: |

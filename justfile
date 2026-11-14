@@ -40,6 +40,18 @@ fmt:
 lint:
     golangci-lint run
 
+# Validate the GoReleaser configuration.
+release-check:
+    goreleaser check
+
+# Build all release archives locally without publishing.
+release-snapshot:
+    goreleaser release --snapshot --clean --skip=publish
+
+# Publish a tagged release (requires GITHUB_TOKEN).
+release:
+    goreleaser release --clean
+
 install: build
     cp -v './build/{{program}}-{{goos}}-{{goarch}}' "{{install_prefix}}/{{program}}"
 

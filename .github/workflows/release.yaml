@@ -34,13 +34,13 @@ jobs:
           cache: false
 
       - name: Validate release configuration
-        run: goreleaser check
+        run: just release-check
 
       - name: Run tests
         run: go test ./...
 
       - name: Release binaries
-        run: goreleaser release --clean
+        run: just release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
