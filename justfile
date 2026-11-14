@@ -13,16 +13,12 @@ build-all:
     goreleaser build --snapshot --clean
 
 # Build a binary for the selected OS and architecture (defaults to the host).
-build os=goos arch=goarch: build-dir
-    GOOS={{os}} GOARCH={{arch}} goreleaser build --snapshot --single-target --clean --output build/{{program}}
-
-# Create the build output directory.
-build-dir:
-    mkdir -p build
+build os=goos arch=goarch:
+    GOOS={{os}} GOARCH={{arch}} goreleaser build --snapshot --single-target --clean
 
 # Build and run the host binary with the supplied arguments.
 run *args: build
-    ./build/{{program}} {{args}}
+    ./dist/{{program}}_{{goos}}_{{goarch}}*/{{program}} {{args}}
 
 # Tidy Go modules and refresh vendored dependencies.
 vendor:
@@ -55,11 +51,11 @@ release:
 
 # Build and install the host binary into GOBIN.
 install: build
-    cp -v './build/{{program}}' "{{install_prefix}}/{{program}}"
+    cp -v ./dist/{{program}}_{{goos}}_{{goarch}}*/{{program}} "{{install_prefix}}/{{program}}"
 
-# Remove local build and release output directories.
+# Remove the build and release output directory.
 clean:
-    rm -rf build dist
+    rm -rf dist
 
 # List available recipes.
 help:

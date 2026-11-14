@@ -45,5 +45,5 @@ jobs:
 
       - name: Smoke test
         run: |
-          ./dist/gh-auth-cli_linux_amd64_v1/gh-auth-cli --help
-          ./dist/gh-auth-cli_linux_amd64_v1/gh-auth-cli --version
+          just run --help
+          just run --version

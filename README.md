@@ -43,7 +43,7 @@ just run --help
 just run --version
 ```
 
-`just build` writes the host binary to `build/gh-auth-cli`. To cross-compile one target, use e.g. `just build linux amd64` (same output path). `just build-all` builds every configured target into `dist/`. All builds use the flags and version metadata from `.goreleaser.yaml`.
+`just build` writes the host binary into GoReleaser's platform-specific directory under `dist/`. To cross-compile one target, use e.g. `just build linux amd64`. `just build-all` builds every configured target. `just run` and `just install` build and use the host binary from `dist/`. All builds use the flags and version metadata from `.goreleaser.yaml` and clean `dist/` first.
 
 ## Releases
 
